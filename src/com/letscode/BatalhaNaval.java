@@ -148,7 +148,7 @@ public class BatalhaNaval {
             }
         }
 
-        System.out.println(posicaoNaviosCPU);
+        /*System.out.println(posicaoNaviosCPU);*/
     }
 
     public static void efetuarTiros(){
