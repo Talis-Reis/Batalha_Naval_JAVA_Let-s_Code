@@ -1,7 +1,6 @@
 package com.letscode;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 
 public class BatalhaNaval {
 
@@ -12,7 +11,7 @@ public class BatalhaNaval {
     public static int quantidadeNaviosPadrao = 10;
 
     public static String [][] tabuleiroJogador1 = new String [numLinhas][numColunas];
-    public static String [][] tabuleiroComputador = new String [numLinhas][numColunas];
+    public static String [][] tabuleiroCPU = new String [numLinhas][numColunas];
 
     public static ArrayList<ArrayList<Integer>> posicaoNaviosCPU = new ArrayList<ArrayList<Integer>>();
 
@@ -26,12 +25,12 @@ public class BatalhaNaval {
 
         criarTabuleiroBatalha(tabuleiroJogador1, nome);
         System.out.printf("");
-        criarTabuleiroBatalha(tabuleiroComputador, "CPU");
+        criarTabuleiroBatalha(tabuleiroCPU, "CPU");
         System.out.printf("");
         posicionarNaviosJogador();
         mostrarTabuleiro(tabuleiroJogador1, nome);
         posicionarNaviosPC();
-        criarTabuleiroBatalha(tabuleiroComputador, "CPU");
+        criarTabuleiroBatalha(tabuleiroCPU, "CPU");
         System.out.printf("");
         System.out.printf("");
         efetuarTiros();
@@ -39,7 +38,7 @@ public class BatalhaNaval {
 
     public static void criarTabuleiroBatalha(String[][] tabuleiro, String nomeJogador) {
 
-        System.out.println("Jogador: " + nomeJogador);
+            System.out.println("Jogador: " + nomeJogador);
         System.out.print(" ");
 
         for (int i = 0; i < numColunas; i++){
@@ -96,33 +95,33 @@ public class BatalhaNaval {
 
         for(int i = 0; i < quantidadeNaviosPadrao; i++){
 
+            int posicaoLinhaNavio = -1;
+            int posicaoColunaNavio = -1;
+
             System.out.println("VOCÊ TEM "+ contadorNavios +" NAVIOS PARA COLOCAR EM POSIÇÃO!!!");
             System.out.println("#################################################################");
             System.out.println("Selecione a linha que deseja para posicionar o navio: ");
-            int posicaoLinhaNavio = Integer.parseInt(entrada.inputValues.nextLine());
+            posicaoLinhaNavio = Integer.parseInt(entrada.inputValues.nextLine());
             System.out.println("Selecione a coluna que deseja para posicionar seu navio: ");
-            int posicaoColunaNavio = Integer.parseInt(entrada.inputValues.nextLine());
+            posicaoColunaNavio = Integer.parseInt(entrada.inputValues.nextLine());
             System.out.println("#################################################################");
 
-            if(tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] == "   "){
-                tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] = " N ";
-                mostrarTabuleiro(tabuleiroJogador1,nome);
-                contadorNavios -=1;
+            if((posicaoLinhaNavio >= 0 && posicaoLinhaNavio <= 5) && (posicaoColunaNavio >= 0 && posicaoColunaNavio <= 10)){
+                if(tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] == "   "){
+                    tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] = " N ";
+                    mostrarTabuleiro(tabuleiroJogador1,nome);
+                    contadorNavios -=1;
+                }else{
+                    System.out.println("Posição escolhida já está populada por um navio!");
+                    i--;
+                }
             }else{
-                System.out.println("Posição escolhida já está populada por um navio!");
+                System.out.println("VALORES ESCOLHIDOS ESTÃO FORA DO PADRAO DO TABULEIRO");
+                System.out.println("TABULEIRO POSSUI 6 LINHAS DE 0 à 5");
+                System.out.println("TABULEIRO POSSUI 10 COLUNAS DE 0 à 9");
+                System.out.println("############################################################");
                 i--;
             }
-
-            /*int posicaoLinhaNavio = (int) (Math.random() * 5);
-            int posicaoColunaNavio = (int) (Math.random() * 10);
-
-            if(tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] == "   "){
-                tabuleiroJogador1[posicaoLinhaNavio][posicaoColunaNavio] = " N ";
-                mostrarTabuleiro(tabuleiroJogador1,nome);
-            }else{
-                mostrarTabuleiro(tabuleiroJogador1,nome);
-                System.out.println("Posição escolhida já está populada por um navio!");
-            }*/
         }
     }
 
@@ -148,7 +147,8 @@ public class BatalhaNaval {
                 break;
             }
         }
-        /*System.out.println(posicaoNaviosCPU);*/
+
+        System.out.println(posicaoNaviosCPU);
     }
 
     public static void efetuarTiros(){
@@ -178,6 +178,7 @@ public class BatalhaNaval {
 
 
             if((linhaDoTiroJogador >= 0 && linhaDoTiroJogador <= 5) && (colunaDoTiroJogador >= 0 && colunaDoTiroJogador <= 10)){
+
                 int linhaDoTiroCPU = (int) (Math.random() * 5);
                 int colunaDoTiroCPU = (int) (Math.random() * 10);
 
@@ -185,49 +186,66 @@ public class BatalhaNaval {
                 verificaPosicaoTiroJogador.add(linhaDoTiroJogador);
                 verificaPosicaoTiroJogador.add(colunaDoTiroJogador);
 
-                if(tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] == " N "){
-                    tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] = " * ";
-                    System.out.println("*******************************************");
-                    System.out.println("CPU AFUNDOU UM NAVIO");
-                    System.out.println("*******************************************");
-                    contadorCPU += 1;
+                if(tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] != "  "){
+                    if(tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] == " N "){
+                        tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] = " * ";
+                        System.out.println("*******************************************");
+                        System.out.println("CPU AFUNDOU UM NAVIO");
+                        System.out.println("*******************************************");
+                        contadorCPU += 1;
 
-                }else if(tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] == " * "){
-                }else{
-                    tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] = " - ";
-                }
-                if(posicaoNaviosCPU.contains(verificaPosicaoTiroJogador)){
-                    if(tabuleiroComputador[linhaDoTiroJogador][colunaDoTiroJogador] == " * "){
+                    }else if(tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] == " * "){
                     }else{
-                        tabuleiroComputador[linhaDoTiroJogador][colunaDoTiroJogador] = " * ";
+                        tabuleiroJogador1[linhaDoTiroCPU][colunaDoTiroCPU] = " - ";
+                    }
+                }else{
+                    continue;
+                }
+
+                if(posicaoNaviosCPU.contains(verificaPosicaoTiroJogador)){
+                    if(tabuleiroCPU[linhaDoTiroJogador][colunaDoTiroJogador] == " * "){
+                    }else{
+                        tabuleiroCPU[linhaDoTiroJogador][colunaDoTiroJogador] = " * ";
                         System.out.println("*******************************************");
                         System.out.println("VOCE AFUNDOU UM NAVIO");
                         System.out.println("*******************************************");
                         contadorJogador += 1;
                     }
                 }else{
-                    tabuleiroComputador[linhaDoTiroJogador][colunaDoTiroJogador] = " - ";
+                    tabuleiroCPU[linhaDoTiroJogador][colunaDoTiroJogador] = " - ";
                 }
                 mostrarTabuleiro(tabuleiroJogador1,nome);
-                mostrarTabuleiro(tabuleiroComputador,"CPU");
+                mostrarTabuleiro(tabuleiroCPU,"CPU");
                 System.out.println("Navios Afundados " + nome + ": " + contadorJogador);
                 System.out.println("Navios Afundados CPU: " + contadorCPU);
 
                 if(contadorJogador == 10 || contadorCPU == 10){
                     if(contadorJogador == 10){
-                        System.out.println(nome + " GANHOU!!!!");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("                  "+nome + " GANHOU!!!!                      ");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
                         break;
                     }
                     if( contadorCPU == 10){
-                        System.out.println(" CPU GANHOU!!!!");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("                       CPU GANHOU!!!!                       ");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
+                        System.out.println("############################################################");
                         break;
                     }
                 }
             }else{
 
                 System.out.println("VALORES ESCOLHIDOS ESTÃO FORA DO PADRAO DO TABULEIRO");
-                System.out.println("TABULEIRO POSSI 6 LINHAS DE 0 à 5");
-                System.out.println("TABULEIRO POSSI 10 COLUNAS DE 0 à 9");
+                System.out.println("TABULEIRO POSSUI 6 LINHAS DE 0 à 5");
+                System.out.println("TABULEIRO POSSUI 10 COLUNAS DE 0 à 9");
                 System.out.println("############################################################");
             }
         }
